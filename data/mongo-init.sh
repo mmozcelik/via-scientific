@@ -1,0 +1,1 @@
+mongoimport --database=via-scientific --collection=omics --file=./data/omics.json

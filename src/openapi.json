@@ -1,0 +1,368 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"DataResponse": {
+				"properties": {
+					"status": {
+						"type": "string"
+					},
+					"data": {},
+					"error": {
+						"additionalProperties": false,
+						"type": "object"
+					}
+				},
+				"required": [
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Required_FindRequest_": {
+				"properties": {
+					"geneIDs": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"geneIDs"
+				],
+				"type": "object",
+				"description": "Make all properties in T required"
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "via-scientific",
+		"version": "1.0.0",
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/omics/gene-ids": {
+			"get": {
+				"operationId": "lookup-gene-ids",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"status": "success",
+											"data": [
+												"AK212155",
+												"AK051368"
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid arguments",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred processing the request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns filtered list of gene IDs, geneID query param is optional,\nif provided filters returned geneIDs with given gene ID, returns max 100 items",
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "geneID",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/omics": {
+			"post": {
+				"operationId": "data-retrieval",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"status": "success",
+											"data": [
+												{
+													"gene": "AK212155",
+													"sampleNames": [
+														"uc029xtn.1",
+														"uc029xuj.1"
+													],
+													"expressionValues": {
+														"exper1": 80,
+														"exper2": 121.07,
+														"exper3": 61,
+														"control1": 147.66,
+														"control2": 112,
+														"control3": 67
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid arguments",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred processing the request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Lookups the omics data with the given gene IDs",
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/Required_FindRequest_"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/omics/{geneID}/analysis": {
+			"get": {
+				"operationId": "data-analysis",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"status": "success",
+											"data": [
+												{
+													"mean": 11.25,
+													"median": 12.55,
+													"variance": 3.22
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid arguments",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred processing the request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "For the given geneID, retrieves the data and returns the mean, median, variance",
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "geneID",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/omics/anomalies": {
+			"get": {
+				"operationId": "anomaly-detection",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								},
+								"examples": {
+									"Example 1": {
+										"value": {
+											"status": "success",
+											"data": [
+												{
+													"gene": "AK212155",
+													"sampleNames": [
+														"uc029xtn.1",
+														"uc029xuj.1"
+													],
+													"expressionValues": {
+														"exper1": 80,
+														"exper2": 121.07,
+														"exper3": 61,
+														"control1": 147.66,
+														"control2": 112,
+														"control3": 67
+													}
+												}
+											]
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid arguments",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "An error occurred processing the request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DataResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns any gene that has a exper value diverges default %30 from control value,\nyou may give a different divergence number using `divergence` query parameter. Default is 0.3.",
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "divergence",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

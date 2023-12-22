@@ -1,0 +1,16 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "src/controller/**/*.ts"
+  ],
+  "routes": {
+    "routesDir": "src"
+  },
+  "spec": {
+    "name": "via-scientific",
+    "outputDirectory": "src",
+    "specVersion": 3,
+    "specFileBaseName": "openapi"
+  }
+}

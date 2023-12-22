@@ -1,0 +1,4 @@
+--exit
+--timeout 30000
+--recursive test/**/*.spec.ts
+--require ts-node/register
